@@ -1,9 +1,9 @@
-name: Deploy MS-Gateway to Render
+name: Deploy ms-gateway to Render
 
 on:
   push:
     branches:
-      - main
+      - main  # Asegúrate de que tu rama se llame main en STS
 
 jobs:
   build-and-push:
@@ -34,9 +34,8 @@ jobs:
         with:
           context: .
           push: true
-          # ✅ Usará: tropimostaxias4/ms-gateway:latest
+          # Usará el repositorio 'ms-gateway' que configuraste en los secretos
           tags: "${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest"
 
       - name: Notificar a Render para actualizar
-        # ✅ Asegúrate de poner el Deploy Hook específico de ms-gateway en los secretos de GitHub
         run: curl -f "${{ secrets.RENDER_DEPLOY_HOOK }}"
