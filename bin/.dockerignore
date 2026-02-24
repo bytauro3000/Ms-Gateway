@@ -1,0 +1,14 @@
+target/
+build/
+out/
+
+.settings/
+.classpath
+.project
+.sts4-cache/
+
+.git
+.gitignore
+
+*.log
+.DS_Store

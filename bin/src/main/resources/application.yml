@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ms-gateway
+  
+  cloud:
+    gateway:
+      routes:
+        # RUTAS AL MONOLITO (Auth, Clientes, Lotes, etc.)
+        - id: ms-monolito
+          uri: https://inmobiliariaivan.onrender.com
+          predicates:
+            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**
+
+        # RUTAS AL MICROSERVICIO (Recibos, Inscripciones, etc.)
+        - id: ms-servicios-basicos
+          uri: https://serviciosbasicos.onrender.com
+          predicates:
+            - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
+
+# Usaremos la misma variable de entorno que ya tienes en Render
+jwt:
+  secret-key: ${JWT_SECRET}
