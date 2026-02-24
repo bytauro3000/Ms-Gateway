@@ -1,14 +1,20 @@
-target/
 build/
 out/
 
+# Configuración de IDEs (Spring Tool Suite / Eclipse / VS Code)
 .settings/
 .classpath
 .project
 .sts4-cache/
+.vscode/
+.idea/
+*.iml
 
+# Control de versiones
 .git
 .gitignore
 
+# Archivos temporales y logs
 *.log
 .DS_Store
+temp/
