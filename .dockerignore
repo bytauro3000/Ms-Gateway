@@ -17,4 +17,8 @@ out/
 # Archivos temporales y logs
 *.log
 .DS_Store
+<<<<<<< HEAD
 temp/
+=======
+temp/
+>>>>>>> branch 'main' of https://github.com/bytauro3000/Ms-Gateway
