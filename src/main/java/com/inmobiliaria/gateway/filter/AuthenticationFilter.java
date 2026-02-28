@@ -25,6 +25,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered { // 👈 Cam
         if (path.contains("/api/auth/login") || path.contains("/api/public/")) {
             return chain.filter(exchange);
         }
+        
+        // 👇👇👇 2. NUEVO: DEJAR PASAR LA PETICIÓN INVISIBLE DEL NAVEGADOR 👇👇👇
+        if (exchange.getRequest().getMethod().name().equals("OPTIONS")) {
+            return chain.filter(exchange);
+        }
 
         // 2. Obtener Token
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
