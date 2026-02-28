@@ -12,7 +12,7 @@ spring:
         - id: ms-monolito
           uri: https://inmobiliariaivan.onrender.com
           predicates:
-            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**
+            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/, /ws/** 
 
         # RUTAS AL MICROSERVICIO (Recibos, Inscripciones, etc.)
         - id: ms-servicios-basicos
