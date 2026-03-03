@@ -21,11 +21,9 @@ public class HealthController {
 
     @GetMapping("/ping")
     public Mono<ResponseEntity<Map<String, String>>> checkHealth() {
-        String urlMonolito = "https://inmobiliariaivan.onrender.com/api/public/ping";
+        // Ahora solo despertamos los servicios que no tengan un cron job externo
         String urlServiciosBasicos = "https://serviciosbasicos.onrender.com/api/public/ping";
 
-        // Despertar servicios con reintentos automáticos si fallan al inicio
-        enviarPingDespertador(urlMonolito, "Monolito");
         enviarPingDespertador(urlServiciosBasicos, "MS-ServiciosBasicos");
 
         Map<String, String> response = new HashMap<>();
@@ -40,10 +38,9 @@ public class HealthController {
             .uri(url)
             .retrieve()
             .bodyToMono(String.class)
-            // Si el servicio está dormido y da error o tarda, reintenta 3 veces
             .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2))) 
             .doOnSuccess(s -> System.out.println("EXITO: " + nombreServicio + " ha respondido al ping."))
             .doOnError(e -> System.out.println("INFO: " + nombreServicio + " aún despertando..."))
-            .subscribe(); // Se ejecuta en segundo plano sin bloquear el Gateway
+            .subscribe(); 
     }
 }

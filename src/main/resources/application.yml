@@ -10,13 +10,13 @@ spring:
       routes:
         # RUTAS AL MONOLITO (Auth, Clientes, Lotes, etc.)
         - id: ms-monolito
-          uri: https://inmobiliariaivan.onrender.com
+          uri: http://localhost:8083
           predicates:
             - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/** 
 
         # RUTAS AL MICROSERVICIO (Recibos, Inscripciones, etc.)
         - id: ms-servicios-basicos
-          uri: https://serviciosbasicos.onrender.com
+          uri: http://localhost:8081
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
 
