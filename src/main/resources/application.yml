@@ -7,19 +7,39 @@ spring:
   
   cloud:
     gateway:
+      httpclient:
+        connect-timeout: 10000
+        response-timeout: 30s
+      
       routes:
-        # RUTAS AL MONOLITO (Auth, Clientes, Lotes, etc.)
+        # RUTAS AL MONOLITO
         - id: ms-monolito
           uri: https://inmobiliariaivan.onrender.com
           predicates:
-            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/** 
+            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                series: SERVER_ERROR
+                exceptions: java.io.IOException, reactor.netty.http.client.PrematureCloseException
+                methods: GET, POST
+                backoff:
+                  firstBackoff: 2s
+                  maxBackoff: 6s
+                  factor: 2
 
-        # RUTAS AL MICROSERVICIO (Recibos, Inscripciones, etc.)
+        # RUTAS AL MICROSERVICIO
         - id: ms-servicios-basicos
           uri: https://serviciosbasicos.onrender.com
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                series: SERVER_ERROR
+                methods: GET, POST
 
-# Usaremos la misma variable de entorno que ya tienes en Render
 jwt:
   secret-key: ${JWT_SECRET}
