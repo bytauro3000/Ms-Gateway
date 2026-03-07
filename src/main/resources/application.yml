@@ -9,7 +9,7 @@ spring:
     gateway:
       httpclient:
         connect-timeout: 10000
-        response-timeout: 180S
+        response-timeout: 120S
       
       routes:
         # RUTAS AL MONOLITO
