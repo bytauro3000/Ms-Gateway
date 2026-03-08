@@ -22,7 +22,7 @@ public class HealthController {
     @GetMapping("/ping")
     public Mono<ResponseEntity<Map<String, String>>> checkHealth() {
         // Ahora solo despertamos los servicios que no tengan un cron job externo
-        String urlServiciosBasicos = "https://serviciosbasicos.onrender.com/api/public/ping";
+        String urlServiciosBasicos = "https://serviciobasico.onrender.com/api/public/ping";
 
         enviarPingDespertador(urlServiciosBasicos, "MS-ServiciosBasicos");
 
