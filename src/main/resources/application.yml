@@ -4,20 +4,22 @@ server:
 spring:
   application:
     name: ms-gateway
-  
+
   cloud:
     gateway:
       httpclient:
         connect-timeout: 10000
         response-timeout: 120S
-      
+
       routes:
         # RUTAS AL MONOLITO
         - id: ms-monolito
-          uri: https://inmobiliariaivan.onrender.com
+          uri: https://inmobiliariaivan.onrender.com/
           predicates:
             - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**,/api/pagos/**
           filters:
+            # ✅ NUEVO: Inyecta el secreto en TODAS las rutas hacia el monolito
+            - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
               args:
                 retries: 3
@@ -31,10 +33,12 @@ spring:
 
         # RUTAS AL MICROSERVICIO
         - id: ms-servicios-basicos
-          uri: https://serviciobasico.onrender.com
+          uri: https://serviciobasico.onrender.com/
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
           filters:
+            # ✅ NUEVO: Inyecta el secreto en TODAS las rutas hacia el microservicio
+            - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
               args:
                 retries: 3
@@ -43,3 +47,6 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET}
+
+gateway:
+  secret-key: ${GATEWAY_SECRET}

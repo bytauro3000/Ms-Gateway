@@ -1,6 +1,7 @@
 package com.inmobiliaria.gateway.filter;
 
 import com.inmobiliaria.gateway.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -12,26 +13,33 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class AuthenticationFilter implements GlobalFilter, Ordered { // 👈 Cambio clave aquí
+public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    // Secreto compartido que identifica al Gateway ante los servicios internos
+    @Value("${gateway.secret-key}")
+    private String gatewaySecretKey;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
 
-        // 1. Rutas públicas
+        // 1. Rutas públicas — pasan directo pero igual reciben el header secreto
+        //    para que el monolito las acepte en su filtro de X-Gateway-Secret
         if (path.contains("/api/auth/login") || path.contains("/api/public/")) {
-            return chain.filter(exchange);
+            return chain.filter(exchange.mutate()
+                .request(r -> r.header("X-Gateway-Secret", gatewaySecretKey))
+                .build());
         }
-        
-        // 👇👇👇 2. NUEVO: DEJAR PASAR LA PETICIÓN INVISIBLE DEL NAVEGADOR 👇👇👇
+
+        // 2. Peticiones OPTIONS del navegador (preflight CORS)
         if (exchange.getRequest().getMethod().name().equals("OPTIONS")) {
             return chain.filter(exchange);
         }
 
-        // 2. Obtener Token
+        // 3. Obtener y validar el JWT
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return onError(exchange, HttpStatus.UNAUTHORIZED);
@@ -44,15 +52,18 @@ public class AuthenticationFilter implements GlobalFilter, Ordered { // 👈 Cam
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
 
-            // 3. Extraer datos
+            // 4. Extraer datos del token
             String username = jwtUtil.extractUsername(token);
             String role = jwtUtil.extractClaim(token, claims -> claims.get("rol", String.class));
 
-            // 4. EL TRUCO: Inyectar headers directamente en el exchange de salida
-            // Usamos mutate() pero aplicado al objeto exchange que recibe el chain
+            // 5. Reenviar la petición con los tres headers:
+            //    - X-Auth-User / X-Auth-Roles → identifican al usuario en los servicios internos
+            //    - X-Gateway-Secret           → prueba que la petición viene del Gateway
             return chain.filter(exchange.mutate()
-                .request(r -> r.header("X-Auth-User", username)
-                              .header("X-Auth-Roles", role))
+                .request(r -> r
+                    .header("X-Auth-User", username)
+                    .header("X-Auth-Roles", role)
+                    .header("X-Gateway-Secret", gatewaySecretKey))
                 .build());
 
         } catch (Exception e) {
