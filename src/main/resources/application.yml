@@ -14,7 +14,7 @@ spring:
       routes:
         # RUTAS AL MONOLITO
         - id: ms-monolito
-          uri: https://inmobiliariaivan.onrender.com
+          uri: http://localhost:8083
           predicates:
             - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**,/api/pagos/**
           filters:
@@ -33,7 +33,7 @@ spring:
 
         # RUTAS AL MICROSERVICIO
         - id: ms-servicios-basicos
-          uri: https://serviciobasico.onrender.com
+          uri: http://localhost:8081
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
           filters:
