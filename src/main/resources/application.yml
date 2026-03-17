@@ -35,7 +35,7 @@ spring:
         - id: ms-servicios-basicos
           uri: https://serviciobasico.onrender.com
           predicates:
-            - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos/**, /api/inscripciones/**
+            - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos-sb/**, /api/inscripciones/**
           filters:
             # ✅ NUEVO: Inyecta el secreto en TODAS las rutas hacia el microservicio
             - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
