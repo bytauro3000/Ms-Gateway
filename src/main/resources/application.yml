@@ -4,46 +4,64 @@ server:
 spring:
   application:
     name: ms-gateway
-
   cloud:
     gateway:
+      default-filters:
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE, INTERNAL_SERVER_ERROR
+            methods: GET
+            backoff:
+              firstBackoff: 200ms
+              maxBackoff: 1000ms
+              factor: 2
+              basedOnPreviousValue: false
+
       httpclient:
         connect-timeout: 10000
-        response-timeout: 320S
+        response-timeout: 30s
+        pool:
+          type: fixed
+          max-idle-time: 45s
+          max-life-time: 180s
 
       routes:
         # RUTAS AL MONOLITO
         - id: ms-monolito
           uri: https://inmobiliariaivan.onrender.com
           predicates:
-            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**,/api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**,/api/pagos/**,/api/tipo-cambio/**,/api/moras/**
+            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**
           filters:
-            # ✅ NUEVO: Inyecta el secreto en TODAS las rutas hacia el monolito
             - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
               args:
-                retries: 3
-                series: SERVER_ERROR
+                retries: 2
                 exceptions: java.io.IOException, reactor.netty.http.client.PrematureCloseException
-                methods: GET, POST
+                methods: GET
                 backoff:
-                  firstBackoff: 2s
-                  maxBackoff: 6s
+                  firstBackoff: 300ms
+                  maxBackoff: 2s
                   factor: 2
+                  basedOnPreviousValue: false
 
-        # RUTAS AL MICROSERVICIOS
+        # RUTAS AL MICROSERVICIO
         - id: ms-servicios-basicos
           uri: https://serviciobasico.onrender.com
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos-sb/**, /api/inscripciones/**
           filters:
-            # ✅ NUEVO: Inyecta el secreto en TODAS las rutas hacia el microservicio
             - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
               args:
-                retries: 3
-                series: SERVER_ERROR
-                methods: GET, POST
+                retries: 2
+                exceptions: java.io.IOException, reactor.netty.http.client.PrematureCloseException
+                methods: GET
+                backoff:
+                  firstBackoff: 300ms
+                  maxBackoff: 2s
+                  factor: 2
+                  basedOnPreviousValue: false
 
 jwt:
   secret-key: ${JWT_SECRET}
