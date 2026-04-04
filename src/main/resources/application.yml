@@ -31,7 +31,7 @@ spring:
                   maxBackoff: 6s
                   factor: 2
 
-        # RUTAS AL MICROSERVICIO
+        # RUTAS AL MICROSERVICIOS
         - id: ms-servicios-basicos
           uri: https://serviciobasico.onrender.com
           predicates:
