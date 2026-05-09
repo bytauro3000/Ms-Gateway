@@ -29,10 +29,10 @@ public class HttpClientConfig {
     public HttpClientCustomizer httpClientCustomizer(ConnectionProvider connectionProvider) {
         return httpClient -> HttpClient.create(connectionProvider) // ← inyecta el provider
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-            .responseTimeout(Duration.ofSeconds(30))
+            .responseTimeout(Duration.ofSeconds(160))
             .doOnConnected(conn -> conn
-                .addHandlerLast(new ReadTimeoutHandler(30, TimeUnit.SECONDS))
-                .addHandlerLast(new WriteTimeoutHandler(30, TimeUnit.SECONDS))
+                .addHandlerLast(new ReadTimeoutHandler(160, TimeUnit.SECONDS))
+                .addHandlerLast(new WriteTimeoutHandler(160, TimeUnit.SECONDS))
             );
     }
 }
