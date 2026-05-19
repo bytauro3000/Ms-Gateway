@@ -27,7 +27,7 @@ spring:
           max-life-time: 180s
 
       routes:
-        # RUTAS AL MONOLITO
+        # RUTAS AL MONOLITOs
         - id: ms-monolito
           uri: https://inmobiliariaivan.onrender.com
           predicates:
