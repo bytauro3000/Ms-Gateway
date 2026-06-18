@@ -31,7 +31,7 @@ spring:
         - id: ms-monolito
           uri: https://inmobiliariaivan.onrender.com
           predicates:
-            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**, /api/comprobantes/**,/api/reporte-mora/**,/api/reporte-ingresos/**
+            - Path=/api/auth/**, /api/public/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**, /api/comprobantes/**,/api/reporte-mora/**,/api/reporte-ingresos/**,/api/nota-credito/**
           filters:
             - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
