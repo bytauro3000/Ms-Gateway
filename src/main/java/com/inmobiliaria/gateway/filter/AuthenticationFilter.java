@@ -28,7 +28,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         // 1. Rutas públicas — pasan directo pero igual reciben el header secreto
         //    para que el monolito las acepte en su filtro de X-Gateway-Secret
-        if (path.contains("/api/auth/login") || path.contains("/api/public/")) {
+        if (esRutaPublica(path)) {
             return chain.filter(exchange.mutate()
                 .request(r -> r.header("X-Gateway-Secret", gatewaySecretKey))
                 .build());
@@ -79,5 +79,12 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus status) {
         exchange.getResponse().setStatusCode(status);
         return exchange.getResponse().setComplete();
+    }
+
+    private boolean esRutaPublica(String path) {
+        return path.contains("/api/auth/login")
+                || path.contains("/api/auth/refresh")
+                || path.contains("/api/auth/logout")
+                || path.contains("/api/public/");
     }
 }
