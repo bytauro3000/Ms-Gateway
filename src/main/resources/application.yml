@@ -29,7 +29,7 @@ spring:
       routes:
         # RUTAS AL MONOLITO
         - id: ms-monolito
-          uri: ${MONOLITO_URL:http://localhost:8083}
+          uri: ${MONOLITO_URL}
           predicates:
             - Path=/api/auth/**, /api/public/**, /api/admin/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**, /api/comprobantes/**,/api/reporte-mora/**,/api/reporte-ingresos/**,/api/nota-credito/**
           filters:
@@ -47,7 +47,7 @@ spring:
 
         # RUTAS AL MICROSERVICIO
         - id: ms-servicios-basicos
-          uri: ${MS_SERVICIOS_BASICOS_URL:http://localhost:8081}
+          uri: ${MS_SERVICIOS_BASICOS_URL}
           predicates:
             - Path=/api/recibos/**, /api/configuraciones/**, /api/pagos-sb/**, /api/inscripciones/**
           filters:
