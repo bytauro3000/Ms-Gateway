@@ -26,12 +26,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
 
-        // 1. Rutas públicas — pasan directo pero igual reciben el header secreto
-        //    para que el monolito las acepte en su filtro de X-Gateway-Secret
+        // 1. Rutas públicas — pasan DIRECTAS sin mutar el request
+        //    para NO perder la cookie de refresh_token ni otros headers.
+        //    El backend ya acepta estas rutas sin X-Gateway-Secret.
         if (esRutaPublica(path)) {
-            return chain.filter(exchange.mutate()
-                .request(r -> r.header("X-Gateway-Secret", gatewaySecretKey))
-                .build());
+            return chain.filter(exchange);
         }
 
         // 2. Peticiones OPTIONS del navegador (preflight CORS)
