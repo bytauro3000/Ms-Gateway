@@ -84,6 +84,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         return path.contains("/api/auth/login")
                 || path.contains("/api/auth/refresh")
                 || path.contains("/api/auth/logout")
-                || path.contains("/api/public/");
+                || path.contains("/api/public/")
+                || path.contains("/chat-ws");
     }
 }
