@@ -31,7 +31,7 @@ spring:
         - id: ms-monolito
           uri: ${MONOLITO_URL}
           predicates:
-            - Path=/api/auth/**, /api/public/**, /api/admin/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /chat-ws/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**, /api/comprobantes/**, /api/reporte-mora/**, /api/reporte-ingresos/**, /api/nota-credito/**, /api/backup/**, /api/sunat/**, /api/agendas/**, /api/empresa/**
+            - Path=/api/auth/**, /api/public/**, /api/admin/**, /api/distritos/**, /api/usuarios/**, /api/separaciones/**, /api/clientes/**, /api/contratos/**, /api/vendedores/**, /api/lotes/**, /api/programas/**, /api/parceleros/**, /api/letras/**, /api/dashboard/**, /api/gateway/inscripciones/**, /api/gateway/recibos/**, /chat/**, /chat-ws/**, /api/archivos/**, /ws/**, /api/mensajes/**, /api/pagos/**, /api/tipo-cambio/**, /api/moras/**, /api/comprobantes/**, /api/reporte-mora/**, /api/reporte-ingresos/**, /api/cuentas-por-cobrar/**, /api/nota-credito/**, /api/backup/**, /api/sunat/**, /api/agendas/**, /api/empresa/**
           filters:
             - AddRequestHeader=X-Gateway-Secret, ${GATEWAY_SECRET}
             - name: Retry
